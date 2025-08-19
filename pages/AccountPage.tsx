@@ -108,6 +108,13 @@ const AccountPage: React.FC = () => {
             {isLogin ? 'Regístrate' : 'Inicia Sesión'}
           </button>
         </p>
+        
+        <div className="text-center text-xs text-gray-500 mt-6 pt-4 border-t border-gray-200">
+            <p>
+                <span className="font-semibold">Sugerencia:</span> Para probar el panel de administración, <button onClick={() => {setIsLogin(false); setEmail('admin@bellezapura.com');}} className="text-primary underline font-semibold">regístrate</button> con el correo <code className="bg-gray-200 text-gray-700 px-1 py-0.5 rounded">admin@bellezapura.com</code> y luego inicia sesión.
+            </p>
+        </div>
+
       </div>
     </div>
   );
