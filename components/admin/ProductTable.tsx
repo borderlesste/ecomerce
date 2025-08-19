@@ -39,7 +39,7 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
                     {products.map((product) => (
                         <tr key={product.id}>
                             <td className="px-6 py-4 whitespace-nowrap">
-                                <img src={product.imageUrl} alt={product.name} className="w-12 h-12 object-cover rounded-md" />
+                                <img src={product.image_url} alt={product.name} className="w-12 h-12 object-cover rounded-md" />
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">{product.name}</div>
@@ -48,9 +48,9 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
                                 <div className="text-sm text-gray-500">{product.brand}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                                {product.salePrice && product.salePrice < product.price ? (
+                                {product.sale_price && product.sale_price < product.price ? (
                                     <div>
-                                        <span className="text-sm font-bold text-red-600">${product.salePrice.toFixed(2)}</span>
+                                        <span className="text-sm font-bold text-red-600">${product.sale_price.toFixed(2)}</span>
                                         <span className="text-xs line-through text-gray-500 ml-2">${product.price.toFixed(2)}</span>
                                     </div>
                                 ) : (

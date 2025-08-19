@@ -4,12 +4,17 @@ import { ProductContext } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
 import ProductCard from '../components/product/ProductCard';
 import StarRating from '../components/product/StarRating';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const ProductDetailPage: React.FC = () => {
     const { productId } = useParams<{ productId: string }>();
-    const { products } = useContext(ProductContext);
+    const { products, loading } = useContext(ProductContext);
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
+    
+    if (loading) {
+        return <LoadingSpinner />;
+    }
 
     const product = products.find(p => p.id === productId);
 
@@ -29,7 +34,7 @@ const ProductDetailPage: React.FC = () => {
         .filter(p => p.category === product.category && p.id !== product.id)
         .slice(0, 4);
 
-    const onSale = product.salePrice && product.salePrice < product.price;
+    const onSale = product.sale_price && product.sale_price < product.price;
     
     const handleAddToCart = () => {
         addToCart(product, quantity);
@@ -40,19 +45,19 @@ const ProductDetailPage: React.FC = () => {
             <section className="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div>
-                        <img src={product.imageUrl} alt={product.name} className="w-full h-auto max-h-[500px] object-cover rounded-lg shadow-md" />
+                        <img src={product.image_url} alt={product.name} className="w-full h-auto max-h-[500px] object-cover rounded-lg shadow-md" />
                     </div>
                     <div className="flex flex-col justify-center">
                         <h2 className="text-sm uppercase text-text-light">{product.brand}</h2>
                         <h1 className="text-3xl md:text-4xl font-bold text-text-main my-2">{product.name}</h1>
                         <div className="flex items-center gap-2 mb-4">
-                            <StarRating rating={product.rating} />
-                            <span className="text-sm text-text-light">({product.reviewCount} reseñas)</span>
+                            <StarRating rating={product.rating_average} />
+                            <span className="text-sm text-text-light">({product.review_count} reseñas)</span>
                         </div>
                         <div className="text-3xl font-bold text-text-main mb-4">
                             {onSale ? (
                                 <div className="flex items-baseline gap-3">
-                                    <span className="text-primary">${product.salePrice?.toFixed(2)}</span>
+                                    <span className="text-primary">${product.sale_price?.toFixed(2)}</span>
                                     <span className="text-xl text-text-light line-through">${product.price.toFixed(2)}</span>
                                 </div>
                             ) : (

@@ -63,7 +63,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ title, products, filt
       case 'price_desc':
         return filtered.sort((a, b) => b.price - a.price);
       case 'rating_desc':
-        return filtered.sort((a, b) => b.rating - a.rating);
+        return filtered.sort((a, b) => b.rating_average - a.rating_average);
       default:
         return filtered;
     }

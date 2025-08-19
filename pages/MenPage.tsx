@@ -2,9 +2,15 @@ import React, { useContext } from 'react';
 import ProductListPage from './ProductListPage';
 import { FilterOptions } from '../types';
 import { ProductContext } from '../context/ProductContext';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const MenPage: React.FC = () => {
-  const { products } = useContext(ProductContext);
+  const { products, loading } = useContext(ProductContext);
+  
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
   const menProducts = products.filter(p => p.audience === 'Hombre');
 
   const brands = [...new Set(menProducts.map(p => p.brand))];

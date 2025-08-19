@@ -4,30 +4,33 @@ import { Product } from '../../types';
 interface ProductModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (product: Product) => void;
+    onSave: (product: Omit<Product, 'id' | 'created_at'>) => void;
     product: Product | null;
 }
 
-const emptyProduct: Omit<Product, 'id' | 'rating' | 'reviewCount'> = {
+const emptyProduct: Omit<Product, 'id' | 'created_at'> = {
     name: '',
     brand: '',
     price: 0,
-    imageUrl: '',
+    image_url: '',
     category: 'Perfume',
     audience: 'Mujer',
     tags: [],
     description: '',
     ingredients: [],
     stock: 0,
-    salePrice: undefined,
+    sale_price: undefined,
+    rating_average: 0,
+    review_count: 0
 };
 
 const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, product }) => {
-    const [formData, setFormData] = useState<Omit<Product, 'id' | 'rating' | 'reviewCount'> & { salePrice?: number }>(emptyProduct);
+    const [formData, setFormData] = useState<Omit<Product, 'id' | 'created_at'>>(emptyProduct);
 
     useEffect(() => {
         if (product) {
-            setFormData(product);
+            const { id, created_at, ...editableProduct } = product;
+            setFormData(editableProduct);
         } else {
             setFormData(emptyProduct);
         }
@@ -39,7 +42,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
         const { name, value } = e.target;
         if (name === 'price' || name === 'stock') {
             setFormData(prev => ({ ...prev, [name]: Number(value) }));
-        } else if (name === 'salePrice') {
+        } else if (name === 'sale_price') {
             setFormData(prev => ({ ...prev, [name]: value === '' ? undefined : Number(value) }));
         }
         else {
@@ -53,11 +56,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const productToSave: Product = {
-            ...(product || { id: '', rating: 0, reviewCount: 0 }),
-            ...formData,
-        };
-        onSave(productToSave);
+        onSave(formData);
     };
 
     return (
@@ -104,13 +103,13 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                             <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
                         </div>
                          <div>
-                            <label htmlFor="salePrice" className="block text-sm font-medium text-gray-700">Precio de Oferta</label>
-                            <input type="number" name="salePrice" id="salePrice" value={formData.salePrice || ''} onChange={handleChange} step="0.01" placeholder="Opcional" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" />
+                            <label htmlFor="sale_price" className="block text-sm font-medium text-gray-700">Precio de Oferta</label>
+                            <input type="number" name="sale_price" id="sale_price" value={formData.sale_price || ''} onChange={handleChange} step="0.01" placeholder="Opcional" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" />
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">URL de la Imagen</label>
-                        <input type="text" name="imageUrl" id="imageUrl" value={formData.imageUrl} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
+                        <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">URL de la Imagen</label>
+                        <input type="text" name="image_url" id="image_url" value={formData.image_url} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
                     </div>
                     <div>
                         <label htmlFor="tags" className="block text-sm font-medium text-gray-700">Tags (separados por coma)</label>

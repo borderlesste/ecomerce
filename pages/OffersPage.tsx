@@ -2,12 +2,13 @@ import React, { useContext, useMemo } from 'react';
 import ProductListPage from './ProductListPage';
 import { FilterOptions } from '../types';
 import { ProductContext } from '../context/ProductContext';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const OffersPage: React.FC = () => {
-  const { products } = useContext(ProductContext);
+  const { products, loading } = useContext(ProductContext);
   
   const offerProducts = useMemo(() => 
-    products.filter(p => p.salePrice && p.salePrice < p.price),
+    products.filter(p => p.sale_price && p.sale_price < p.price),
     [products]
   );
 
@@ -22,6 +23,10 @@ const OffersPage: React.FC = () => {
         'Marca': brands,
     };
   }, [offerProducts]);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <ProductListPage

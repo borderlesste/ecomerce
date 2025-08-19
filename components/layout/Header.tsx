@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 
 const Logo: React.FC = () => (
   <NavLink to="/" className="flex items-center gap-2">
@@ -12,6 +13,7 @@ const Logo: React.FC = () => (
 
 const Header: React.FC = () => {
   const { itemCount } = useCart();
+  const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -73,6 +75,7 @@ const Header: React.FC = () => {
               </NavLink>
               <NavLink to="/cuenta" className={navLinkClass} aria-label="Mi cuenta">
                 <UserIcon className="h-6 w-6" />
+                 {session && <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-green-400 ring-2 ring-white" />}
               </NavLink>
               <NavLink to="/carrito" className={`${navLinkClass} relative`} aria-label={`Carrito con ${itemCount} productos`}>
                 <ShoppingCartIcon className="h-6 w-6" />

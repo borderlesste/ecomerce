@@ -1,13 +1,15 @@
 
+
 import React, { useState, useContext } from 'react';
 import { Product } from '../types';
 import ProductTable from '../components/admin/ProductTable';
 import ProductModal from '../components/admin/ProductModal';
 import HomePageManager from '../components/admin/HomePageManager';
 import { ProductContext } from '../context/ProductContext';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const AdminPage: React.FC = () => {
-    const { products, addProduct, updateProduct, deleteProduct } = useContext(ProductContext);
+    const { products, addProduct, updateProduct, deleteProduct, loading } = useContext(ProductContext);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -26,20 +28,24 @@ const AdminPage: React.FC = () => {
         setEditingProduct(null);
     };
 
-    const handleSaveProduct = (productToSave: Product) => {
+    const handleSaveProduct = async (productToSave: Omit<Product, 'id'>) => {
         if (editingProduct) {
-            updateProduct(productToSave);
+            await updateProduct({ ...editingProduct, ...productToSave });
         } else {
-            addProduct(productToSave);
+            await addProduct(productToSave);
         }
         handleCloseModal();
     };
 
-    const handleDeleteProduct = (productId: string) => {
+    const handleDeleteProduct = async (productId: string) => {
         if (window.confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-            deleteProduct(productId);
+            await deleteProduct(productId);
         }
     };
+
+    if(loading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <div className="space-y-12">

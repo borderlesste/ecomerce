@@ -1,8 +1,53 @@
 
-import React, { useState } from 'react';
+import React, { useState, FormEvent } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 const AccountPage: React.FC = () => {
+  const { session, user, signUp, signIn, signOut } = useAuth();
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      if (isLogin) {
+        const { error } = await signIn(email, password);
+        if (error) throw error;
+      } else {
+        const { error } = await signUp(email, password, fullName);
+        if (error) throw error;
+      }
+    } catch (err: any) {
+      setError(err.error_description || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (session) {
+    return (
+      <div className="flex justify-center items-center py-10">
+        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md text-center">
+          <h2 className="text-2xl font-bold text-text-main">Bienvenido de nuevo</h2>
+          <p className="text-text-light">
+            Has iniciado sesión como <span className="font-semibold text-text-main">{user?.email}</span>
+          </p>
+          <button
+            onClick={signOut}
+            className="w-full bg-primary text-white font-semibold py-2 px-4 rounded-md hover:bg-rose-700 transition-colors"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center items-center py-10">
@@ -11,40 +56,55 @@ const AccountPage: React.FC = () => {
           {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
         </h2>
         
-        <form className="space-y-6">
+        {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           {!isLogin && (
              <div>
-                <label htmlFor="name" className="text-sm font-medium text-text-main block mb-2">Nombre</label>
-                <input type="text" id="name" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" required />
+                <label htmlFor="name" className="text-sm font-medium text-text-main block mb-2">Nombre Completo</label>
+                <input 
+                  type="text" 
+                  id="name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)} 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" 
+                  required 
+                />
             </div>
           )}
           <div>
             <label htmlFor="email" className="text-sm font-medium text-text-main block mb-2">Correo Electrónico</label>
-            <input type="email" id="email" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" required />
+            <input 
+              type="email" 
+              id="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" 
+              required 
+            />
           </div>
           <div>
             <label htmlFor="password" className="text-sm font-medium text-text-main block mb-2">Contraseña</label>
-            <input type="password" id="password" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" required />
+            <input 
+              type="password" 
+              id="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary" 
+              required 
+            />
           </div>
-          {isLogin && (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input type="checkbox" id="remember" className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"/>
-                <label htmlFor="remember" className="ml-2 block text-sm text-text-light">Recuérdame</label>
-              </div>
-              <a href="#" className="text-sm text-primary hover:underline">¿Olvidaste tu contraseña?</a>
-            </div>
-          )}
+          
           <div>
-            <button type="submit" className="w-full bg-primary text-white font-semibold py-2 px-4 rounded-md hover:bg-rose-700 transition-colors">
-              {isLogin ? 'Entrar' : 'Registrarse'}
+            <button type="submit" disabled={loading} className="w-full bg-primary text-white font-semibold py-2 px-4 rounded-md hover:bg-rose-700 transition-colors disabled:bg-gray-400">
+              {loading ? 'Procesando...' : (isLogin ? 'Entrar' : 'Registrarse')}
             </button>
           </div>
         </form>
 
         <p className="text-sm text-center text-text-light">
           {isLogin ? '¿No tienes una cuenta?' : '¿Ya tienes una cuenta?'}
-          <button onClick={() => setIsLogin(!isLogin)} className="font-medium text-primary hover:underline ml-1">
+          <button onClick={() => { setIsLogin(!isLogin); setError(null); }} className="font-medium text-primary hover:underline ml-1">
             {isLogin ? 'Regístrate' : 'Inicia Sesión'}
           </button>
         </p>

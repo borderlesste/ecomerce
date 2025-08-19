@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ProductCard from '../components/product/ProductCard';
 import StarRating from '../components/product/StarRating';
 import { ProductContext } from '../context/ProductContext';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const SparkleIcon: React.FC<{ className: string }> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} viewBox="0 0 20 20" fill="currentColor">
@@ -12,7 +13,11 @@ const SparkleIcon: React.FC<{ className: string }> = ({ className }) => (
 
 
 const HomePage: React.FC = () => {
-  const { products, homePageContent } = useContext(ProductContext);
+  const { products, homePageContent, loading } = useContext(ProductContext);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   const newProducts = products.filter(p => homePageContent.newProductIds.includes(p.id));
   const popularProducts = products.filter(p => homePageContent.popularProductIds.includes(p.id));

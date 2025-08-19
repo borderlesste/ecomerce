@@ -6,13 +6,13 @@ import { CartItem } from '../types';
 
 const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
     const { updateQuantity, removeFromCart } = useCart();
-    const onSale = item.salePrice && item.salePrice < item.price;
-    const priceToUse = onSale ? item.salePrice! : item.price;
+    const onSale = item.sale_price && item.sale_price < item.price;
+    const priceToUse = onSale ? item.sale_price! : item.price;
 
     return (
         <div className="flex flex-col sm:flex-row items-start sm:items-center py-4 border-b gap-4">
             <div className="flex items-center gap-4 flex-grow w-full sm:w-auto">
-                <img src={item.imageUrl} alt={item.name} className="w-20 h-20 object-cover rounded-md" />
+                <img src={item.image_url} alt={item.name} className="w-20 h-20 object-cover rounded-md" />
                 <div className="flex-grow">
                     <h3 className="font-semibold">{item.name}</h3>
                     <p className="text-sm text-text-light">{item.brand}</p>

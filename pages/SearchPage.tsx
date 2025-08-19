@@ -3,9 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 import ProductListPage from './ProductListPage';
 import { FilterOptions } from '../types';
 import { ProductContext } from '../context/ProductContext';
+import LoadingSpinner from '../components/ui/LoadingSpinner';
 
 const SearchPage: React.FC = () => {
-  const { products } = useContext(ProductContext);
+  const { products, loading } = useContext(ProductContext);
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
 
@@ -36,6 +37,10 @@ const SearchPage: React.FC = () => {
     };
   }, [searchResults]);
 
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+  
   if (!query) {
     return (
         <div className="text-center py-20 bg-white rounded-lg shadow-lg">

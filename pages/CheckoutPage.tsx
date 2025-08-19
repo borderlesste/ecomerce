@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
@@ -124,13 +125,13 @@ const CheckoutPage: React.FC = () => {
                     {cartItems.map(item => (
                         <div key={item.id} className="flex justify-between items-center text-sm">
                             <div className="flex items-center gap-3">
-                                <img src={item.imageUrl} alt={item.name} className="w-12 h-12 object-cover rounded-md" />
+                                <img src={item.image_url} alt={item.name} className="w-12 h-12 object-cover rounded-md" />
                                 <div>
                                     <p className="font-semibold">{item.name}</p>
                                     <p className="text-text-light">Cantidad: {item.quantity}</p>
                                 </div>
                             </div>
-                            <p className="font-medium">${(item.salePrice || item.price).toFixed(2)}</p>
+                            <p className="font-medium">${(item.sale_price || item.price).toFixed(2)}</p>
                         </div>
                     ))}
                 </div>

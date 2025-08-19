@@ -3,6 +3,7 @@ import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { ProductProvider } from './context/ProductContext';
+import { AuthProvider } from './context/AuthContext';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
@@ -22,31 +23,33 @@ import OrderConfirmationPage from './pages/OrderConfirmationPage';
 const App: React.FC = () => {
   return (
     <ProductProvider>
-      <CartProvider>
-        <HashRouter>
-          <div className="flex flex-col min-h-screen font-sans text-text-main">
-            <Header />
-            <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/ofertas" element={<OffersPage />} />
-                <Route path="/mujer" element={<WomenPage />} />
-                <Route path="/hombre" element={<MenPage />} />
-                <Route path="/ninos" element={<BoysPage />} />
-                <Route path="/ninas" element={<GirlsPage />} />
-                <Route path="/cuenta" element={<AccountPage />} />
-                <Route path="/carrito" element={<CartPage />} />
-                <Route path="/admin" element={<AdminPage />} />
-                <Route path="/producto/:productId" element={<ProductDetailPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/confirmacion-pedido" element={<OrderConfirmationPage />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
-        </HashRouter>
-      </CartProvider>
+      <AuthProvider>
+        <CartProvider>
+          <HashRouter>
+            <div className="flex flex-col min-h-screen font-sans text-text-main">
+              <Header />
+              <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/search" element={<SearchPage />} />
+                  <Route path="/ofertas" element={<OffersPage />} />
+                  <Route path="/mujer" element={<WomenPage />} />
+                  <Route path="/hombre" element={<MenPage />} />
+                  <Route path="/ninos" element={<BoysPage />} />
+                  <Route path="/ninas" element={<GirlsPage />} />
+                  <Route path="/cuenta" element={<AccountPage />} />
+                  <Route path="/carrito" element={<CartPage />} />
+                  <Route path="/admin" element={<AdminPage />} />
+                  <Route path="/producto/:productId" element={<ProductDetailPage />} />
+                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/confirmacion-pedido" element={<OrderConfirmationPage />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </HashRouter>
+        </CartProvider>
+      </AuthProvider>
     </ProductProvider>
   );
 };
