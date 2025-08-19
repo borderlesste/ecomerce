@@ -1,15 +1,24 @@
+
 import React, { useContext, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ProductContext } from '../context/ProductContext';
 import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 import ProductCard from '../components/product/ProductCard';
 import StarRating from '../components/product/StarRating';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+
+const HeartIcon: React.FC<{ className?: string; filled: boolean }> = ({ className, filled }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" className={className} fill={filled ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z" />
+    </svg>
+);
 
 const ProductDetailPage: React.FC = () => {
     const { productId } = useParams<{ productId: string }>();
     const { products, loading } = useContext(ProductContext);
     const { addToCart } = useCart();
+    const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
     const [quantity, setQuantity] = useState(1);
     
     if (loading) {
@@ -29,6 +38,16 @@ const ProductDetailPage: React.FC = () => {
             </div>
         );
     }
+
+    const isFavorited = isInWishlist(product.id);
+
+    const handleWishlistToggle = () => {
+        if (isFavorited) {
+            removeFromWishlist(product.id);
+        } else {
+            addToWishlist(product.id);
+        }
+    };
 
     const similarProducts = products
         .filter(p => p.category === product.category && p.id !== product.id)
@@ -80,6 +99,13 @@ const ProductDetailPage: React.FC = () => {
                             </div>
                             <button onClick={handleAddToCart} className="flex-grow bg-primary text-white font-semibold py-3 px-6 rounded-md hover:bg-rose-700 transition-colors shadow-sm">
                                 Agregar al Carrito
+                            </button>
+                             <button 
+                                onClick={handleWishlistToggle} 
+                                className="p-3 border rounded-md hover:bg-gray-100 transition-colors" 
+                                aria-label={isFavorited ? 'Quitar de la lista de deseos' : 'Añadir a la lista de deseos'}
+                            >
+                                <HeartIcon className={`h-6 w-6 ${isFavorited ? 'text-primary' : 'text-text-light'}`} filled={isFavorited} />
                             </button>
                         </div>
 

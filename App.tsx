@@ -2,6 +2,7 @@
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import { ProductProvider } from './context/ProductContext';
 import { AuthProvider } from './context/AuthContext';
 import Header from './components/layout/Header';
@@ -20,6 +21,7 @@ import OffersPage from './pages/OffersPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
+import WishlistPage from './pages/WishlistPage';
 import { isSupabaseConfigured } from './supabase/client';
 
 const WarningBanner: React.FC = () => (
@@ -32,33 +34,36 @@ const App: React.FC = () => {
   return (
     <ProductProvider>
       <AuthProvider>
-        <CartProvider>
-          <HashRouter>
-            <div className="flex flex-col min-h-screen font-sans text-text-main">
-              {!isSupabaseConfigured && <WarningBanner />}
-              <Header />
-              <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/search" element={<SearchPage />} />
-                  <Route path="/ofertas" element={<OffersPage />} />
-                  <Route path="/mujer" element={<WomenPage />} />
-                  <Route path="/hombre" element={<MenPage />} />
-                  <Route path="/ninos" element={<BoysPage />} />
-                  <Route path="/ninas" element={<GirlsPage />} />
-                  <Route path="/cuenta" element={<AccountPage />} />
-                  <Route path="/perfil" element={<ProfilePage />} />
-                  <Route path="/carrito" element={<CartPage />} />
-                  <Route path="/admin" element={<AdminPage />} />
-                  <Route path="/producto/:productId" element={<ProductDetailPage />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
-                  <Route path="/confirmacion-pedido" element={<OrderConfirmationPage />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </HashRouter>
-        </CartProvider>
+        <WishlistProvider>
+          <CartProvider>
+            <HashRouter>
+              <div className="flex flex-col min-h-screen font-sans text-text-main">
+                {!isSupabaseConfigured && <WarningBanner />}
+                <Header />
+                <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/search" element={<SearchPage />} />
+                    <Route path="/ofertas" element={<OffersPage />} />
+                    <Route path="/mujer" element={<WomenPage />} />
+                    <Route path="/hombre" element={<MenPage />} />
+                    <Route path="/ninos" element={<BoysPage />} />
+                    <Route path="/ninas" element={<GirlsPage />} />
+                    <Route path="/cuenta" element={<AccountPage />} />
+                    <Route path="/perfil" element={<ProfilePage />} />
+                    <Route path="/carrito" element={<CartPage />} />
+                    <Route path="/favoritos" element={<WishlistPage />} />
+                    <Route path="/admin" element={<AdminPage />} />
+                    <Route path="/producto/:productId" element={<ProductDetailPage />} />
+                    <Route path="/checkout" element={<CheckoutPage />} />
+                    <Route path="/confirmacion-pedido" element={<OrderConfirmationPage />} />
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </HashRouter>
+          </CartProvider>
+        </WishlistProvider>
       </AuthProvider>
     </ProductProvider>
   );

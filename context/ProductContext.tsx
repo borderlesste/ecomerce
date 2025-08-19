@@ -49,7 +49,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
   const addProduct = async (product: Omit<Product, 'id' | 'created_at'>) => {
     const { data, error } = await supabase
       .from('products')
-      .insert([{ ...product }])
+      .insert([product])
       .select();
     
     if (error) {
@@ -63,7 +63,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
     const { id, created_at, ...productToUpdate } = updatedProduct;
     const { data, error } = await supabase
       .from('products')
-      .update({ ...productToUpdate })
+      .update(productToUpdate)
       .eq('id', id)
       .select();
       

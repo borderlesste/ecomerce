@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 const Logo: React.FC = () => (
   <NavLink to="/" className="flex items-center gap-2">
@@ -13,6 +14,7 @@ const Logo: React.FC = () => (
 
 const Header: React.FC = () => {
   const { itemCount } = useCart();
+  const { itemCount: wishlistItemCount } = useWishlist();
   const { session } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -69,9 +71,13 @@ const Header: React.FC = () => {
             </form>
 
             <div className="flex items-center gap-x-4">
-              <NavLink to="#" className={`${navLinkClass} relative`} aria-label="Lista de deseos">
+              <NavLink to="/favoritos" className={`${navLinkClass} relative`} aria-label={`Lista de deseos con ${wishlistItemCount} productos`}>
                 <HeartIcon className="h-6 w-6" />
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                {wishlistItemCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {wishlistItemCount}
+                    </span>
+                )}
               </NavLink>
               <NavLink to={session ? "/perfil" : "/cuenta"} className={navLinkClass} aria-label={session ? "Mi Perfil" : "Mi Cuenta"}>
                 <div className="relative">
