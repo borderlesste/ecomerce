@@ -73,9 +73,11 @@ const Header: React.FC = () => {
                 <HeartIcon className="h-6 w-6" />
                 <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
               </NavLink>
-              <NavLink to="/cuenta" className={navLinkClass} aria-label="Mi cuenta">
-                <UserIcon className="h-6 w-6" />
-                 {session && <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-green-400 ring-2 ring-white" />}
+              <NavLink to={session ? "/perfil" : "/cuenta"} className={navLinkClass} aria-label={session ? "Mi Perfil" : "Mi Cuenta"}>
+                <div className="relative">
+                  <UserIcon className="h-6 w-6" />
+                  {session && <span className="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white" />}
+                </div>
               </NavLink>
               <NavLink to="/carrito" className={`${navLinkClass} relative`} aria-label={`Carrito con ${itemCount} productos`}>
                 <ShoppingCartIcon className="h-6 w-6" />

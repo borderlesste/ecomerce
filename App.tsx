@@ -12,6 +12,7 @@ import MenPage from './pages/MenPage';
 import BoysPage from './pages/BoysPage';
 import GirlsPage from './pages/GirlsPage';
 import AccountPage from './pages/AccountPage';
+import ProfilePage from './pages/ProfilePage';
 import CartPage from './pages/CartPage';
 import AdminPage from './pages/AdminPage';
 import SearchPage from './pages/SearchPage';
@@ -46,6 +47,7 @@ const App: React.FC = () => {
                   <Route path="/ninos" element={<BoysPage />} />
                   <Route path="/ninas" element={<GirlsPage />} />
                   <Route path="/cuenta" element={<AccountPage />} />
+                  <Route path="/perfil" element={<ProfilePage />} />
                   <Route path="/carrito" element={<CartPage />} />
                   <Route path="/admin" element={<AdminPage />} />
                   <Route path="/producto/:productId" element={<ProductDetailPage />} />

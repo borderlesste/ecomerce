@@ -1,6 +1,8 @@
+
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { supabase } from '../supabase/client';
 import { Session, User } from '../types';
+import { UserAttributes } from '@supabase/supabase-js';
 
 interface AuthContextType {
   session: Session | null;
@@ -9,6 +11,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, fullName: string) => Promise<any>;
   signIn: (email: string, password: string) => Promise<any>;
   signOut: () => Promise<any>;
+  updateUser: (attributes: UserAttributes) => Promise<any>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,6 +60,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const signOut = async () => {
     return supabase.auth.signOut();
   };
+
+  const updateUser = async (attributes: UserAttributes) => {
+      const { data, error } = await supabase.auth.updateUser(attributes);
+      if (data.user) {
+          // Manually update local state because onAuthStateChange might not fire for metadata updates
+          setUser(prevUser => prevUser ? { ...prevUser, ...data.user } : data.user);
+      }
+      return { data, error };
+  }
   
   const value = {
     session,
@@ -65,6 +77,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     signUp,
     signIn,
     signOut,
+    updateUser,
   };
 
   return (
