@@ -7,7 +7,7 @@ interface ProductContextType {
   products: Product[];
   loading: boolean;
   homePageContent: HomePageContent;
-  addProduct: (product: Omit<Product, 'id' | 'created_at' | 'rating_average' | 'review_count'>) => Promise<void>;
+  addProduct: (product: Omit<Product, 'id' | 'created_at'>) => Promise<void>;
   updateProduct: (product: Product) => Promise<void>;
   deleteProduct: (productId: string) => Promise<void>;
   updateHomePageContent: (content: HomePageContent) => void;
@@ -46,7 +46,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
     fetchProducts();
   }, []);
 
-  const addProduct = async (product: Omit<Product, 'id' | 'created_at' | 'rating_average' | 'review_count'>) => {
+  const addProduct = async (product: Omit<Product, 'id' | 'created_at'>) => {
     const { data, error } = await supabase
       .from('products')
       .insert([product])
@@ -55,12 +55,12 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
     if (error) {
       console.error('Error adding product:', error);
     } else if (data) {
-      setProducts(prev => [data[0], ...prev]);
+      setProducts(prev => [data[0] as Product, ...prev]);
     }
   };
 
   const updateProduct = async (updatedProduct: Product) => {
-    const { id, ...productToUpdate } = updatedProduct;
+    const { id, created_at, ...productToUpdate } = updatedProduct;
     const { data, error } = await supabase
       .from('products')
       .update(productToUpdate)
@@ -70,7 +70,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
     if (error) {
       console.error('Error updating product:', error);
     } else if (data) {
-      setProducts(prev => prev.map(p => p.id === id ? data[0] : p));
+      setProducts(prev => prev.map(p => p.id === id ? data[0] as Product : p));
     }
   };
 
