@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Product } from '../../types';
 
@@ -15,6 +14,7 @@ const emptyProduct: Omit<Product, 'id' | 'rating' | 'reviewCount'> = {
     price: 0,
     imageUrl: '',
     category: 'Perfume',
+    audience: 'Mujer',
     tags: [],
     description: '',
     ingredients: [],
@@ -67,22 +67,32 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                             <input type="text" name="brand" id="brand" value={formData.brand} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
                         </div>
                         <div>
+                           <label htmlFor="price" className="block text-sm font-medium text-gray-700">Precio</label>
+                           <input type="number" name="price" id="price" value={formData.price} onChange={handleChange} step="0.01" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
                            <label htmlFor="category" className="block text-sm font-medium text-gray-700">Categoría</label>
                             <select name="category" id="category" value={formData.category} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary">
                                 <option>Perfume</option>
                                 <option>Cabello</option>
+                                <option>Ropa</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="audience" className="block text-sm font-medium text-gray-700">Público</label>
+                            <select name="audience" id="audience" value={formData.audience} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary">
+                                <option>Mujer</option>
+                                <option>Hombre</option>
+                                <option>Niño</option>
+                                <option>Niña</option>
                             </select>
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label htmlFor="price" className="block text-sm font-medium text-gray-700">Precio</label>
-                            <input type="number" name="price" id="price" value={formData.price} onChange={handleChange} step="0.01" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
-                        </div>
-                        <div>
-                            <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
-                            <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
-                        </div>
+                     <div>
+                        <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
+                        <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
                     </div>
                     <div>
                         <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">URL de la Imagen</label>

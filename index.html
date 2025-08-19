@@ -11,11 +11,12 @@
       theme: {
         extend: {
           colors: {
-            'primary': '#E11D48',
-            'secondary': '#FDF2F8',
-            'accent': '#F472B6',
-            'text-main': '#1F2937',
-            'text-light': '#6B7280',
+            'primary': '#F43F5E',      // rose-500 for main call-to-action color
+            'primary-light': '#FECDD3', // rose-200 for lighter shades
+            'accent': '#F97316',        // orange-500 for logo and gradients
+            'text-main': '#1F2937',      // gray-800
+            'text-light': '#6B7280',     // gray-500
+            'ui-background': '#F9FAFB', // gray-50
           }
         }
       }
@@ -32,7 +33,7 @@
 }
 </script>
 </head>
-<body class="bg-secondary">
+<body class="bg-ui-background">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>

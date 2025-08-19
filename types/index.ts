@@ -1,4 +1,3 @@
-
 export interface Product {
   id: string;
   name: string;
@@ -7,7 +6,8 @@ export interface Product {
   rating: number;
   reviewCount: number;
   imageUrl: string;
-  category: 'Perfume' | 'Cabello';
+  category: 'Perfume' | 'Cabello' | 'Ropa';
+  audience: 'Mujer' | 'Hombre' | 'Niño' | 'Niña';
   tags: string[];
   description: string;
   ingredients: string[];

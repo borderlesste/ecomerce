@@ -15,10 +15,10 @@ interface ProductContextType {
 export const ProductContext = createContext<ProductContextType>({} as ProductContextType);
 
 const initialHomePageContent: HomePageContent = {
-    bannerTitle: 'Colección de Verano',
-    bannerSubtitle: 'Descubre nuestras fragancias y productos exclusivos para brillar esta temporada.',
-    newProductIds: ['p1', 'h1', 'p2', 'h2'],
-    popularProductIds: ['p3', 'h3', 'p4', 'h4'],
+    bannerTitle: 'Belleza Auténtica',
+    bannerSubtitle: 'Descubre nuestra colección premium de perfumes, productos para el cabello y cosméticos de las mejores marcas del mundo.',
+    newProductIds: ['p1', 'h1', 'c1', 'h2'],
+    popularProductIds: ['p3', 'h3', 'c2', 'c3'],
 };
 
 export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
