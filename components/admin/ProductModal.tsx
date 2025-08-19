@@ -19,10 +19,11 @@ const emptyProduct: Omit<Product, 'id' | 'rating' | 'reviewCount'> = {
     description: '',
     ingredients: [],
     stock: 0,
+    salePrice: undefined,
 };
 
 const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, product }) => {
-    const [formData, setFormData] = useState<Omit<Product, 'id' | 'rating' | 'reviewCount'>>(emptyProduct);
+    const [formData, setFormData] = useState<Omit<Product, 'id' | 'rating' | 'reviewCount'> & { salePrice?: number }>(emptyProduct);
 
     useEffect(() => {
         if (product) {
@@ -36,7 +37,14 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: name === 'price' || name === 'stock' ? Number(value) : value }));
+        if (name === 'price' || name === 'stock') {
+            setFormData(prev => ({ ...prev, [name]: Number(value) }));
+        } else if (name === 'salePrice') {
+            setFormData(prev => ({ ...prev, [name]: value === '' ? undefined : Number(value) }));
+        }
+        else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,9 +98,15 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
                             </select>
                         </div>
                     </div>
-                     <div>
-                        <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
-                        <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
+                            <input type="number" name="stock" id="stock" value={formData.stock} onChange={handleChange} className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" required />
+                        </div>
+                         <div>
+                            <label htmlFor="salePrice" className="block text-sm font-medium text-gray-700">Precio de Oferta</label>
+                            <input type="number" name="salePrice" id="salePrice" value={formData.salePrice || ''} onChange={handleChange} step="0.01" placeholder="Opcional" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary" />
+                        </div>
                     </div>
                     <div>
                         <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700">URL de la Imagen</label>

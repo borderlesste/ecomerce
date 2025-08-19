@@ -13,6 +13,8 @@ import AccountPage from './pages/AccountPage';
 import CartPage from './pages/CartPage';
 import AdminPage from './pages/AdminPage';
 import SearchPage from './pages/SearchPage';
+import OffersPage from './pages/OffersPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +27,7 @@ const App: React.FC = () => {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/search" element={<SearchPage />} />
+                <Route path="/ofertas" element={<OffersPage />} />
                 <Route path="/mujer" element={<WomenPage />} />
                 <Route path="/hombre" element={<MenPage />} />
                 <Route path="/ninos" element={<BoysPage />} />
@@ -32,6 +35,7 @@ const App: React.FC = () => {
                 <Route path="/cuenta" element={<AccountPage />} />
                 <Route path="/carrito" element={<CartPage />} />
                 <Route path="/admin" element={<AdminPage />} />
+                <Route path="/producto/:productId" element={<ProductDetailPage />} />
               </Routes>
             </main>
             <Footer />

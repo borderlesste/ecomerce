@@ -5,6 +5,9 @@ import { CartItem } from '../types';
 
 const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
     const { updateQuantity, removeFromCart } = useCart();
+    const onSale = item.salePrice && item.salePrice < item.price;
+    const priceToUse = onSale ? item.salePrice! : item.price;
+
     return (
         <div className="flex flex-col sm:flex-row items-start sm:items-center py-4 border-b gap-4">
             <div className="flex items-center gap-4 flex-grow w-full sm:w-auto">
@@ -24,8 +27,11 @@ const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
                     className="w-20 text-center border rounded-md p-1"
                     aria-label={`Cantidad para ${item.name}`}
                 />
-                <div className="w-24 text-right font-semibold">
-                    ${(item.price * item.quantity).toFixed(2)}
+                <div className="w-24 text-right">
+                    <p className="font-semibold text-base">${(priceToUse * item.quantity).toFixed(2)}</p>
+                    {onSale && (
+                        <p className="line-through text-sm text-text-light">${(item.price * item.quantity).toFixed(2)}</p>
+                    )}
                 </div>
             </div>
         </div>
@@ -36,7 +42,7 @@ const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
 const CartPage: React.FC = () => {
     const { cartItems, totalAmount } = useCart();
     const shippingCost = 5.00;
-    const totalWithShipping = totalAmount + shippingCost;
+    const totalWithShipping = totalAmount > 0 ? totalAmount + shippingCost : 0;
 
     if (cartItems.length === 0) {
         return (
@@ -65,7 +71,7 @@ const CartPage: React.FC = () => {
                         </div>
                         <div className="flex justify-between text-text-light">
                             <span>Envío</span>
-                            <span>${shippingCost.toFixed(2)}</span>
+                            <span>${totalAmount > 0 ? shippingCost.toFixed(2) : '0.00'}</span>
                         </div>
                     </div>
                     <div className="flex justify-between font-bold text-lg mt-4 pt-4 border-t">

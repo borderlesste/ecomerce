@@ -1,4 +1,3 @@
-
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/product/ProductCard';
@@ -51,7 +50,7 @@ const HomePage: React.FC = () => {
               <Link to="/mujer" className="bg-gradient-to-r from-primary to-accent text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:opacity-90 transition-all">
                 Explorar Productos
               </Link>
-              <Link to="#" className="bg-white text-text-main font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition-colors border border-gray-200">
+              <Link to="/ofertas" className="bg-white text-text-main font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition-colors border border-gray-200">
                 Ver Ofertas
               </Link>
             </div>

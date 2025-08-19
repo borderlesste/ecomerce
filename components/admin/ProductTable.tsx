@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Product } from '../../types';
 
@@ -49,7 +48,14 @@ const ProductTable: React.FC<ProductTableProps> = ({ products, onEdit, onDelete 
                                 <div className="text-sm text-gray-500">{product.brand}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">${product.price.toFixed(2)}</div>
+                                {product.salePrice && product.salePrice < product.price ? (
+                                    <div>
+                                        <span className="text-sm font-bold text-red-600">${product.salePrice.toFixed(2)}</span>
+                                        <span className="text-xs line-through text-gray-500 ml-2">${product.price.toFixed(2)}</span>
+                                    </div>
+                                ) : (
+                                    <div className="text-sm text-gray-900">${product.price.toFixed(2)}</div>
+                                )}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${product.stock > 10 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
