@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
@@ -80,9 +81,6 @@ const Header: React.FC = () => {
                     {itemCount}
                   </span>
                 )}
-                 {itemCount === 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">2</span>
-                 )}
               </NavLink>
             </div>
              <button

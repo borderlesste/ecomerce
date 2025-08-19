@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
@@ -15,6 +16,8 @@ import AdminPage from './pages/AdminPage';
 import SearchPage from './pages/SearchPage';
 import OffersPage from './pages/OffersPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderConfirmationPage from './pages/OrderConfirmationPage';
 
 const App: React.FC = () => {
   return (
@@ -36,6 +39,8 @@ const App: React.FC = () => {
                 <Route path="/carrito" element={<CartPage />} />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="/producto/:productId" element={<ProductDetailPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/confirmacion-pedido" element={<OrderConfirmationPage />} />
               </Routes>
             </main>
             <Footer />

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
@@ -78,9 +79,9 @@ const CartPage: React.FC = () => {
                         <span>Total</span>
                         <span>${totalWithShipping.toFixed(2)}</span>
                     </div>
-                    <button className="mt-6 w-full bg-primary text-white font-semibold py-3 rounded-md hover:bg-rose-700 transition-colors">
+                    <Link to="/checkout" className="mt-6 block w-full text-center bg-primary text-white font-semibold py-3 rounded-md hover:bg-rose-700 transition-colors">
                        Proceder al Pago
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>
