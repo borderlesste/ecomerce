@@ -43,12 +43,14 @@ const PayPalButtonsComponent: React.FC<{
               body: { cartItems, shippingInfo },
             });
             if (funcError) throw new Error(funcError.message);
+            if (!data || !data.paypalOrderId) throw new Error("Server did not return a PayPal Order ID.");
             setIsProcessing(false);
             return data.paypalOrderId;
           } catch (err: any) {
             setError('No se pudo crear el pedido de PayPal. Por favor, inténtelo de nuevo.');
             setIsProcessing(false);
-            return null;
+            // Re-throw the error to let PayPal's SDK handle it, which will trigger onError
+            throw err;
           }
         },
         onApprove: async (data: { orderID: string }) => {
@@ -60,13 +62,24 @@ const PayPalButtonsComponent: React.FC<{
               body: { paypalOrderId: data.orderID },
             });
             if (funcError) throw new Error(funcError.message);
+
+            // Add robust validation for the server response after capturing the order.
+            if (!result || !result.orderId) {
+                throw new Error("La respuesta del servidor no contenía un ID de pedido después de la captura.");
+            }
+
             onSuccessfulCheckout(result.orderId);
           } catch (err: any) {
             setError('Error al procesar el pago. No se le ha cobrado. Por favor, inténtelo de nuevo.');
             setIsProcessing(false);
+            // Re-throw the error to let PayPal's SDK handle it, which will trigger onError
+            throw err;
           }
         },
         onError: (err: any) => {
+          // This callback is called by PayPal when an error occurs,
+          // for example, when our createOrder or onApprove promises reject.
+          console.error("PayPal onError callback caught:", err);
           setError('Ocurrió un error con PayPal. Por favor, refresque la página e inténtelo de nuevo.');
           setIsProcessing(false);
         },
@@ -78,7 +91,12 @@ const PayPalButtonsComponent: React.FC<{
     <div className="mt-6 min-h-[100px]">
       {isProcessing && <div className="text-center text-text-light">Procesando...</div>}
       {error && <div className="text-red-600 text-center p-2 bg-red-50 rounded-md">{error}</div>}
-      <div ref={paypalRef} className={`${isProcessing ? 'hidden' : ''}`}></div>
+      {/* 
+        Do not hide the button container div. The PayPal SDK manages the visual state 
+        of the buttons (e.g., showing a spinner). Hiding the container can interfere 
+        with the SDK and cause script errors.
+      */}
+      <div ref={paypalRef}></div>
     </div>
   );
 };

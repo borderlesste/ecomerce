@@ -1,14 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
 import { Product } from '../../types';
+import { Database } from '../../supabase/client';
 
 interface ProductModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSave: (product: Omit<Product, 'id' | 'created_at'>) => void;
+    onSave: (product: Database['public']['Tables']['products']['Insert']) => void;
     product: Product | null;
 }
 
-const emptyProduct: Omit<Product, 'id' | 'created_at'> = {
+const emptyProduct: Database['public']['Tables']['products']['Insert'] = {
     name: '',
     brand: '',
     price: 0,
@@ -25,7 +27,7 @@ const emptyProduct: Omit<Product, 'id' | 'created_at'> = {
 };
 
 const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, product }) => {
-    const [formData, setFormData] = useState<Omit<Product, 'id' | 'created_at'>>(emptyProduct);
+    const [formData, setFormData] = useState<Database['public']['Tables']['products']['Insert']>(emptyProduct);
 
     useEffect(() => {
         if (product) {

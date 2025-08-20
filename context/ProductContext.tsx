@@ -1,13 +1,13 @@
 
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
 import { Product, HomePageContent } from '../types';
-import { supabase } from '../supabase/client';
+import { supabase, Database } from '../supabase/client';
 
 interface ProductContextType {
   products: Product[];
   loading: boolean;
   homePageContent: HomePageContent;
-  addProduct: (product: Omit<Product, 'id' | 'created_at'>) => Promise<void>;
+  addProduct: (product: Database['public']['Tables']['products']['Insert']) => Promise<void>;
   updateProduct: (product: Product) => Promise<void>;
   deleteProduct: (productId: string) => Promise<void>;
   updateHomePageContent: (content: HomePageContent) => void;
@@ -46,7 +46,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({ children })
     fetchProducts();
   }, []);
 
-  const addProduct = async (product: Omit<Product, 'id' | 'created_at'>) => {
+  const addProduct = async (product: Database['public']['Tables']['products']['Insert']) => {
     const { data, error } = await supabase
       .from('products')
       .insert([product])

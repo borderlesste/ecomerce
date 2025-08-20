@@ -8,6 +8,7 @@ import HomePageManager from '../components/admin/HomePageManager';
 import { ProductContext } from '../context/ProductContext';
 import { useAuth } from '../context/AuthContext';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import { Database } from '../supabase/client';
 
 const AccessDenied: React.FC = () => (
     <div className="text-center py-20 bg-white rounded-lg shadow-lg">
@@ -45,7 +46,7 @@ const AdminPage: React.FC = () => {
         setEditingProduct(null);
     };
 
-    const handleSaveProduct = async (productToSave: Omit<Product, 'id' | 'created_at'>) => {
+    const handleSaveProduct = async (productToSave: Database['public']['Tables']['products']['Insert']) => {
         if (editingProduct) {
             await updateProduct({ ...editingProduct, ...productToSave });
         } else {
