@@ -19,7 +19,7 @@ const emptyProduct: Omit<Product, 'id' | 'created_at'> = {
     description: '',
     ingredients: [],
     stock: 0,
-    sale_price: undefined,
+    sale_price: null,
     rating_average: 0,
     review_count: 0
 };
@@ -43,7 +43,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ isOpen, onClose, onSave, pr
         if (name === 'price' || name === 'stock') {
             setFormData(prev => ({ ...prev, [name]: Number(value) }));
         } else if (name === 'sale_price') {
-            setFormData(prev => ({ ...prev, [name]: value === '' ? undefined : Number(value) }));
+            setFormData(prev => ({ ...prev, [name]: value === '' ? null : Number(value) }));
         }
         else {
             setFormData(prev => ({ ...prev, [name]: value }));

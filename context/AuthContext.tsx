@@ -22,22 +22,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getSession = async () => {
-        const { data: { session } } = await supabase.auth.getSession();
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-    }
-    
-    getSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+    // setLoading es true por defecto.
+    // onAuthStateChange dispara un evento inmediatamente con la sesión inicial.
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
+      // Una vez que se recupera la sesión inicial, se detiene la carga.
+      setLoading(false);
     });
 
+    // Limpiar la suscripción cuando el componente se desmonte.
     return () => {
-      authListener.subscription.unsubscribe();
+      subscription.unsubscribe();
     };
   }, []);
 
@@ -64,7 +60,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const updateUser = async (attributes: UserAttributes) => {
       const { data, error } = await supabase.auth.updateUser(attributes);
       if (data.user) {
-          // Manually update local state because onAuthStateChange might not fire for metadata updates
+          // Actualizar manualmente el estado local porque onAuthStateChange podría no dispararse para actualizaciones de metadatos
           setUser(prevUser => prevUser ? { ...prevUser, ...data.user } : data.user);
       }
       return { data, error };
